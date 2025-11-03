@@ -1,0 +1,110 @@
+\section{2.1 Amplifier with great amplification}
+\subsection{theory}
+An amplifier is given with, in figure: \ref{fig:circuit_1}, it is a non-inverting amplifier
+with a gain of a 1001. The upper cutoff frequency is to be determined by the op amp itself
+but the lower cutoff is to be determined by the RC-circuit on the output of the amplifier.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{billeder/CIRCUIT_1.png}
+    \caption{non-inverting amplifier with 1001 times gain}
+    \label{fig:circuit_1}
+\end{figure}
+
+Since the filter is supposed to be designed for the human ear, the cutoff frequency should be somewhere
+arund the 20Hz range. Choosing a suitable standard value capacitor, say 47nF, we can solve for the Required resistance
+\begin{align}
+     R_3 = \frac{1}{2 \pi C_1 R_3 } = 20~\text{Hz} &\Rightarrow \frac{1}{1880 \cdot nF \cdot Hz} = 169~\text{k} \Omega
+\end{align}
+we choose 180k$\Omega$, this yields a cut-off:
+\begin{align}
+    f_c = \frac{1}{2 \pi C_1 R_3} = 18.8~\text{Hz}
+\end{align} 
+
+Next is to determine the cut-off frequency of the operation amplifier. This is determined by the system gain and the \textit{open-loop gain, phase vs frequency}
+which is figure: 2-21 in the MCP601 datasheet, this is also known as the \textit{gain-bandwidth product (GBP)}.
+Which in this case is $GBP = 2.8~\text{MHz}$
+
+As stated in the exercise, the gain of the system is 1001, this is determined by the feedback network:
+\begin{align}
+    A_N = 1 + \frac{R2}{R1} \Rightarrow 1 + \frac{100\text{k} \Omega}{100 \Omega} = 1001
+\end{align}
+
+thus the bandwidth of the amplifier is:
+\begin{align}
+    f_B = \frac{GBP}{A_N} \Rightarrow \frac{2.8~\text{MHz}}{1001} = 2.8~\text{KHz}
+\end{align}
+
+Thus this circuit is not suited as an audio amplifier, due to the fact that the cutoff is an order of magnitude below the upper human hearing range of 20KHz
+
+To calculate the noise of the amplifier, we have to identify individual contributors to this nois
+These are \textit{resistor noise},\textit{current noise} and the \textit{voltage noise}.
+To calculate this, some of the factors are stated in the datasheet\\
+
+From the datasheet, the voltage noise is $e_{nw} = 21\, \frac{\mathrm{nV}}{\sqrt{\mathrm{Hz}}}$
+and the current noise is $i_{nw} = 0.6\, \frac{\mathrm{fA}}{\sqrt{\mathrm{Hz}}}$, these values are both at $f_{CE} = f_{CI} = 1\, \mathrm{KHz}$.
+
+From the bandwidth defined by the output filter and the op amp itself, it is possible to create a brick-wall equivalent.
+which acts as an analogy for the white noise, when we pass $\frac{1}{f}$ noise through a first-order filter.
+
+We create this equivalent by having two frequencies which the noise is "contained" within
+\begin{align}
+    f_L &= f_C \cdot \frac{\pi}{2} = 29.5~\text{Hz}\\
+    f_H &= f_B \cdot \frac{\pi}{2} = 4.4~\text{KHz}
+\end{align}
+
+The bandwidth provided by these two frequencies are also known as \textit{equivalent noise bandwidth}
+\\
+The noise voltage and current can then be calculated as
+\begin{align}
+    E_N &= e_{nw} \sqrt{ f_c e \ln\!\left(\frac{f_H}{f_L}\right) + f_H - f_L } = 0.061 \mathrm{mV}\\
+    I_N &= u_{nw} \sqrt{ f_c e \ln\!\left(\frac{f_H}{f_L}\right) + f_H - f_L } = 1.26 \mathrm{pA}
+\end{align} 
+
+the final op amp voltage noise then gets amplified by the noise gain
+\begin{align}
+    V_{outN_V} = A_N \cdot E_N = 61 \mathrm{mV}
+\end{align}
+
+The current noise, is the current that is entering the inverting input, from a loop, using superposition, 
+the voltage source in the output of the op-amp gets grounded,
+meaning that the current source essentially sees two resistances in parallel \\
+
+%insert picture of ground op amp output voltage souce, and the feedback network to show parallel resistances
+\begin{center}
+\begin{circuitikz}
+    \draw 
+    (0,0) node[ground]{}
+    to[american current source, l=$I_N$] (0,3)
+    coordinate (top);
+
+    \draw 
+    (top) to[short] (2,3)
+    to[R=$R_1$] (2,0) node[ground]{};
+
+    \draw 
+    (top) to[short] (4,3)
+    to[R=$R_2$] (4,0) node[ground]{};
+\end{circuitikz}
+\end{center}
+The equivalent resistance $R_{EQ} = R1||R2 \Rightarrow (\frac{1}{100\cdot 10^3 \Omega} + \frac{1}{100\Omega})^{-1} = 99.9 \Omega$.\\
+voltage from the current noise then becomes:
+\begin{align}
+    V_{outN_I} = I_N \cdot R_{EQ} \cdot A_N = 0.126 \mathrm{\mu V} 
+\end{align}
+
+The final contribution is the thermal- or \textit{johnsonnoise} from the feedback network and from the resistor in the filter:
+
+\begin{align}
+    V_{out_{Req}} &= \sqrt{4 k t \cdot R_{EQ} \cdot (F_H - F_L)} \cdot A_N = 2.701\mathrm{mV}\\ 
+    V_{out_{Rfilter}} &= \sqrt{4 k t \cdot 180 \mathrm{k \Omega} \cdot (F_L - 0 \mathrm{Hz})}  = 0.306 \mathrm{\mu V}
+\end{align}
+
+
+The total RMS voltage then becomes the sum of all the sources:
+\begin{align}
+    V_{TotRMS} = \sqrt{V_{outN_V}^2 + V_{outN_I}^2 + V_{out_{Req}}^2 + V_{out_{Rfilter}}^2} = 61.02 \mathrm{mV}
+\end{align}
+
+\subsection{simulation}
+\subsection{realisation}

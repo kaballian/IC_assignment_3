@@ -1,0 +1,54 @@
+\section{2.3 circuit illustrating the effect of shotnoise(diode noise)}
+
+
+\subsection{theory}
+Optical receiver circuits, use transimpedance amplifiers to make a I/V conversion,
+however this is prone to noise from the current source and parasitic elements of the diode, such as parasitic capaticance and resistance.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{billeder/CIRCUIT_3.png}
+    \caption{photo detector circuit, a transimpedance amplifier, filtered into a noninverting amplifier with a gain of 1001}
+    \label{fig:circuit_3}
+\end{figure}
+
+
+The diode in question is a SFH213 and accoring to its datasheet is has a capaticance of $C_D = 11 \mathrm{pF}$
+The resistance of the diode is not given in the datasheet, however it is often multiple orders of magnitude larger than the
+feedback resistance, so $R_D = 1\mathrm{G\Omega}$ is chosen.
+\\
+From the circuit we also have a feedback network $R8 = 100 \mathrm{k\Omega}$ and $C3 = 220\mathrm{pF}$ We can then
+create expressions for the two impedances $Z1$ and $Z2$ which will determine the bandwidth of the amplifier
+
+\begin{align}
+    Z1(j\omega) &= \frac{R1}{1 + j\omega R1 C1}\\
+    Z2(j\omega) &= \frac{R2}{1 + j\omega R2 C2}
+\end{align}
+
+To determine the DC-gain of the amplifier, which is defined as $ A_N = \frac{DC_{output}}{I_{detector}}$ 
+relating voltage to current, the gain becomes $100\mathrm{k\Omega}$. To its size, we ignore the diode resistance on
+the input.
+
+The total 
+
+
+
+The transfer characteristics of the high-pass filter before the non-inverting amplifier can be calculated as:
+\begin{align}
+    V_o &= V_{in} \cdot G(s)\\
+    G(s) &= \frac{R6}{\frac{1}{sC2} + R6} \Rightarrow \frac{s}{s + \frac{1}{C2R6}}
+\end{align}
+
+
+with a cutoff frequency at:
+\begin{align}
+    f_{C2} = \frac{1}{2 \pi C2 R6} = 15.392\mathrm{Hz}
+\end{align}
+
+
+the transfer characteristics of the op amp is set by its GBWP, which is unity as 2.8MHz
+
+
+
+\subsection{simulation}
+\subsection{realisation}

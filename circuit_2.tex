@@ -1,0 +1,63 @@
+\section{2.2 Thermal noise from resistor}
+
+\subsection{theory}
+Reusing the amplifier from section 2.1, it is desired to see the thermal noise effect from a large resistor on the input 
+of the amplifier.
+
+The circuit is:
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{billeder/CIRCUIT_2.png}
+    \caption{same non-noninverting amplifier from previous section, this 
+    time with a large input resistance, which acts a generator resistance}
+    \label{fig:circuit_2}
+\end{figure}
+
+Due to the fact that a generator resistance now is present at the non-inverting input,
+this means that the thermal- and currentnoise terms generated here, must be
+added to the sum of noise sources.
+
+As for the current noise, the bandwdith is still determined by the output of the filter 
+and the limitation of the op amp itself.
+
+\begin{align}
+    V_{out_{NnonInv100k}} &= I_N \cdot 100 \mathrm{k \Omega} \cdot A_N = 0.126 \mathrm{mV}\\
+    V_{out_{NnonInv200k}} &= I_N \cdot 200 \mathrm{k \Omega} \cdot A_N = 0.252 \mathrm{mV}
+\end{align}
+
+And the thermal noise:
+
+\begin{align}
+    V_{out_{NonInvThermal100k}} &= \sqrt{4kt \cdot 100 \mathrm{k \Omega}\cdot(F_H - F_L)} \cdot A_N = 0.085 \mathrm{mV}\\  
+    V_{out_{NonInvThermal200k}} &= \sqrt{4kt \cdot 200 \mathrm{k \Omega}\cdot(F_H - F_L)} \cdot A_N = 0.121 \mathrm{mV} 
+\end{align}
+
+The total RMS voltage with generator resistance term added
+\begin{align}
+    V_{TotRMS} &= \sqrt{V_{outN_V}^2 + V_{outN_I}^2 + V_{out_{Req}}^2 + V_{out_{Rfilter}}^2 + V_{out_{NnonInv100k}}^2 + V_{out_{NonInvThermal100k}}^2} = 105 \mathrm{mV}\\
+    V_{TotRMS} &= \sqrt{V_{outN_V}^2 + V_{outN_I}^2 + V_{out_{Req}}^2 + V_{out_{Rfilter}}^2 + V_{out_{NnonInv200k}}^2 + V_{out_{NonInvThermal200k}}^2} = 135.375 \mathrm{mV}
+\end{align}
+
+
+\subsection{simulation}
+\subsection{realisation}
+% \begin{tikzpicture}
+%     \begin{axis}[
+%     width=10cm,
+%     xlabel={$R_{\mathrm{gen}}$ [k$\Omega$]},
+%     ylabel={$V_{\mathrm{out,Rgen}}$ [V/√Hz]},
+%     grid=both,
+%     minor tick num=1,
+%     thick,
+%     domain=50:500,
+%     samples=100,
+%     ]
+%     % Parameters: IN = 2e-12 A/√Hz, AN = 1000 (example)
+%     \addplot[
+%       blue,
+%       very thick,
+%     ]{2e-12 * (x*1e3) * 1000}; % x in kΩ → convert to Ω
+%     \addlegendentry{$I_N = 2\,\mathrm{pA}/\sqrt{\mathrm{Hz}},\,A_N=1000$}
+%     \end{axis}
+% \end{tikzpicture}
+
