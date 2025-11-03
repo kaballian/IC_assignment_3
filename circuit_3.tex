@@ -2,7 +2,7 @@
 
 
 \subsection{theory}
-Optical receiver circuits, use transimpedance amplifiers to make a I/V conversion,
+Optical receiver circuits, use transimpedance amplifiers to make an I/V conversion,
 however this is prone to noise from the current source and parasitic elements of the diode, such as parasitic capaticance and resistance.
 
 \begin{figure}[!htb]
@@ -12,41 +12,96 @@ however this is prone to noise from the current source and parasitic elements of
     \label{fig:circuit_3}
 \end{figure}
 
-
-The diode in question is a SFH213 and accoring to its datasheet is has a capaticance of $C_D = 11 \mathrm{pF}$
-The resistance of the diode is not given in the datasheet, however it is often multiple orders of magnitude larger than the
-feedback resistance, so $R_D = 1\mathrm{G\Omega}$ is chosen.
+Above is the overall circuit, which contains subcircuits, the transimpedance amplifier implemented by op amp U3, the high pass filter $C2R6$ and a 
+non-inverting amplifier U4. This also means there are multiple noise bandwidths. For U3 the bandwidth is determined by
+the high-pass filter for the lower limit aswell as the gain-bandwidth product for the upper limit.
+As for U4, the lower limit is determined by the measurement equipment, for an analog discovery the AC RMS is 3Hz, and the upper 
+limit is determined by U4's gain bandwidth product. As will be shown later, the bandwidth of the op amp is above 1KHz, thus
+the value for $e_{nw} = 21 \VperRootHz{n} $
 \\
-From the circuit we also have a feedback network $R8 = 100 \mathrm{k\Omega}$ and $C3 = 220\mathrm{pF}$ We can then
-create expressions for the two impedances $Z1$ and $Z2$ which will determine the bandwidth of the amplifier
-
+Determine the noise gains:
+Since the transimpedance amplifier, is mainly dominated by current noise, the voltage noise gain is set to 1
 \begin{align}
-    Z1(j\omega) &= \frac{R1}{1 + j\omega R1 C1}\\
-    Z2(j\omega) &= \frac{R2}{1 + j\omega R2 C2}
+    A_{NU3} = 1 
 \end{align}
 
-To determine the DC-gain of the amplifier, which is defined as $ A_N = \frac{DC_{output}}{I_{detector}}$ 
-relating voltage to current, the gain becomes $100\mathrm{k\Omega}$. To its size, we ignore the diode resistance on
-the input.
-
-The total 
-
-
-
-The transfer characteristics of the high-pass filter before the non-inverting amplifier can be calculated as:
+For op amp U4 the noise gain is determined by the closed loop gain:
 \begin{align}
-    V_o &= V_{in} \cdot G(s)\\
-    G(s) &= \frac{R6}{\frac{1}{sC2} + R6} \Rightarrow \frac{s}{s + \frac{1}{C2R6}}
+    A_{NU4} = 1 + \frac{R10}{R11} = 1001
+\end{align}
+This gain is also the same as the signal gain.
+
+The upper and lower limit for U3's noise bandwidth:
+\begin{align}
+    f_{U3l} &= \frac{1}{2 \pi R6 C2} \cdot \frac{\pi}{2} = 24.178 \mathrm{Hz} \\
+    f_{U3h} &= \frac{f_t}{A_{NU4}} \cdot \frac{\pi}{2} = 4.394 \mathrm{kHz}
 \end{align}
 
 
-with a cutoff frequency at:
+The main noise component of noise from a photodiode is shot-noise. Its noise originating from charge carriers
+when they cross a potential barrer such as a diode junction. It is defined as $\sqrt{2 q I_d}$
+where $q = 1.602\cdot 10^{-19}\mathrm{C}$, is the electron charge.
+\\ 
+It is possible to create an equation relating voltage noise from current as a function of the diode current $I_d$
 \begin{align}
-    f_{C2} = \frac{1}{2 \pi C2 R6} = 15.392\mathrm{Hz}
+    V_{Ndiode}(I_d) = R8 \cdot A_{NU3} \cdot A_{U4} \cdot \sqrt{2 q I_d \cdot(f_{U3h} - f_{U3h})}
+\end{align}
+
+Voltage noise from op amp U3:
+\begin{align}
+    V_{NU3} = e_{nw} \cdot A_{NU3} \cdot A_{U4} \cdot \sqrt{f_{ce} \cdot \ln\!\left(\frac{f_{U3h}}{f_{U3l}}\right) + f_{U3h} -f_{U3l}} = 2.057 \mathrm{mV}
+\end{align}
+
+Current noise from op amp U3:
+\begin{align}
+    V_{NIU3} = A_{NU3} \cdot A_{U4} \cdot i_{ni} \cdot R8 \sqrt{(f_{U3h} - f_{U3h})} = 3.97 \mathrm{\mu V}
+\end{align}
+
+Thermal noise from R8:
+\begin{align}
+    V_{NR8} = A_{NU3} \cdot A_{U4} \sqrt{4kt \cdot R8 \cdot (f_{U3h} - f_{U3h})} = 2.693 \mathrm{mV}
+\end{align}
+
+Noise bandwidth from U4: 
+\begin{align}
+    f_{U4l} = 3 \mathrm{Hz} \cdot \frac{\pi}{2} = 4.712 \mathrm{Hz}\\
+    f_{U4h} = f_{U3h} = 4.934\mathrm{kHz}
+\end{align}
+
+Next is all the noise that is related to the op amp U4, starting with noise from R6, 
+however this is limited from lowpass relationship
+\begin{align}
+    V_{NR6} = A_{U4} \cdot \sqrt{4kt \cdot R6 \cdot (f_{U3l} - f_{U4l})} = 123.239 \mathrm{\mu V}
+\end{align}
+
+Voltage noise from U4:
+\begin{align}
+    V_{NU4} = e_{nw} \cdot A_{NU4} \cdot A_{U4} \cdot \sqrt{f_{ce} \cdot \ln\!\left(\frac{f_{U4h}}{f_{U4l}}\right) + f_{U4h} - f_{U4l} } = 2.227 \mathrm{mV}
+\end{align}
+
+Current noise from U4 positive and negative inputs:
+\begin{align}
+    V_{NIU4+} &= A_{NU} \cdot i_{ni} \cdot R6 \cdot \sqrt{(f_{U4h} - f_{U4l})} = 1.87 \mathrm{\mu V}\\  
+    V_{NIU4-} &= A_{NU} \cdot i_{ni} \cdot \frac{R10R11}{R10+R11} \cdot \sqrt{(f_{U4h} - f_{U4l})} = 3.975 \mathrm{nV} 
 \end{align}
 
 
-the transfer characteristics of the op amp is set by its GBWP, which is unity as 2.8MHz
+And lastly thermal noise from U4 feedback network:
+\begin{align}
+    V_{NR10R11} = A_{NU4} \cdot \sqrt{4kt \cdot \frac{R10R11}{R10+R11} \cdot (f_{U4h} - f_{U4l})} = 85.318 \mathrm{\mu V}
+\end{align}
+
+The individual terms can then be squared, rooted and summed together to get the entire noise 
+contribution of the entire circuit.
+This total noise is a function of the diode current 
+\begin{align}
+    V_{Ntotal}(I_d) = \sqrt{V_{Ndiode}(I_d)^2 + V_{NU3}^2 + 
+    V_{NIU3}^2 + V_{NR8}^2 + V_{NR6}^2 + V_{NU4}^2 + 
+    V_{NIU4+}^2 + V_{NIU4-}^2  + V_{NR10R11}^2 } 
+\end{align}
+
+
+
 
 
 
