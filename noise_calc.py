@@ -136,24 +136,25 @@ mask = I_diode > 0
 I_diode_pos = I_diode[mask]
 V_noise_pos = V_noise[mask]
 
-fig, axs = plt.subplots(2, 1, figsize=(7, 8))
+# fig, axs = plt.subplots(2, 1, figsize=(7, 8))
 
 
-# plt.figure()
+plt.figure()
 # plt.plot(I_diode_pos, V_noise_pos, 'o-', label='Measured')
-# plt.xlabel('Diode current $I_d$ [A]')
-# plt.ylabel('Output noise $V_{noise}$ [V]')
-# plt.title('Measured Noise vs Diode Current')
-# plt.grid(True, which='both')
-# plt.legend()
-# plt.show()
+plt.plot(I_diode_uA, V_noise_mVAC, 'o-', label='Measured')
+plt.xlabel('Diode current $I_d$ [mA]')
+plt.ylabel('Output noise $V_{noise}$ [mV AC-RMS]')
+plt.title('Measured Noise vs Diode Current')
+plt.grid(True, which='both')
+plt.legend()
+plt.show()
 
-axs[0].plot(I_diode_pos, V_noise_pos, 'o-', label='Measured Noise')
-axs[0].set_xlabel('Diode current $I_d$ [A]')
-axs[0].set_ylabel('Output noise $V_{noise}$ [V]')
-axs[0].grid(True, which='both')
-axs[0].legend()
-axs[0].set_title('Measured Noise vs Diode Current')
+# axs[0].plot(I_diode_pos, V_noise_pos, 'o-', label='Measured Noise')
+# axs[0].set_xlabel('Diode current $I_d$ [A]')
+# axs[0].set_ylabel('Output noise $V_{noise}$ [V]')
+# axs[0].grid(True, which='both')
+# axs[0].legend()
+# axs[0].set_title('Measured Noise vs Diode Current')
 
 
 
@@ -184,24 +185,22 @@ df = pd.DataFrame(data)
 print(df)
 
 
-# plt.figure()
-# plt.plot(df["id [A]"], df["VNtotal [V]"], label=r"$V_{Ntotal}$")
-# plt.xlabel("Diode current $I_d$ [A]")
-# plt.ylabel("Total noise $V_{Ntotal}$ [V]")
-# plt.title("Total Noise vs Diode Current")
-# plt.grid(True, which="both", ls="--")
-# plt.legend()
-# plt.tight_layout()
-# plt.show()
-
-
-axs[1].plot(df["id [A]"], df["VNtotal [V]"], label=r"$V_{Ntotal}$")
-axs[1].set_xlabel("Diode current $I_d$ [A]")
-axs[1].set_ylabel("Total noise $V_{Ntotal}$ [V]")
-# axs[1].title("Total Noise vs Diode Current")
-axs[1].grid(True, which="both", ls="--")
-axs[1].legend()
-
-
+plt.figure()
+plt.plot(df["id [A]"], df["VNtotal [V]"], label=r"$V_{Ntotal}$")
+plt.xlabel("Diode current $I_d$ [A]")
+plt.ylabel("Total noise $V_{Ntotal}$ [V]")
+plt.title("Total Noise vs Diode Current")
+plt.grid(True, which="both", ls="--")
+plt.legend()
 plt.tight_layout()
 plt.show()
+
+
+# axs[1].plot(df["id [A]"], df["VNtotal [V]"], label=r"$V_{Ntotal}$")
+# axs[1].set_xlabel("Diode current $I_d$ [A]")
+# axs[1].set_ylabel("Total noise $V_{Ntotal}$ [V]")
+# # axs[1].title("Total Noise vs Diode Current")
+# axs[1].grid(True, which="both", ls="--")
+# axs[1].legend()
+# plt.tight_layout()
+# plt.show()

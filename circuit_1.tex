@@ -106,5 +106,20 @@ The total RMS voltage then becomes the sum of all the sources:
     V_{TotRMS} = \sqrt{V_{outN_V}^2 + V_{outN_I}^2 + V_{out_{Req}}^2 + V_{out_{Rfilter}}^2} = 61.02 \mathrm{mV}
 \end{align}
 
+\clearpage
+
+
 \subsection{simulation}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{billeder/CIRCUIT_1_SIM.png}
+    \caption{siumlation of the first circuit configuration. }
+    \label{fig:circuit1_simulation}
+\end{figure}
+
 \subsection{realisation}
+Following the schematic and building the circuits lead to a measurement of $AC_{RMS} = 1.730\mathrm{mV}$.
+To increase the accuracy of the measurement, the bench top multimeter was used, as it has better accuracy in AC-RMS scenarios. 
+Whereas the accuracy of the oscilloscope is limited, due to the fact it integrates the signal over a shorter time period,
+usualy only the entire "screen".

@@ -40,24 +40,24 @@ The total RMS voltage with generator resistance term added
 
 
 \subsection{simulation}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{billeder/CIRCUIT_2_SIM_100k.png}
+    \caption{simulation result of the noise spectrum of the non inverting amplifier with a generator resistance of 100k}
+    \label{fig:circuit2_simulation100k}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{billeder/CIRCUIT_2_SIM_200k.png}
+    \caption{simulation result of the noise spectrum of the non inverting amplifier with a generator resistance of 100k}
+    \label{fig:circuit2_simulation200k}
+\end{figure}
+
+
+
+
 \subsection{realisation}
-% \begin{tikzpicture}
-%     \begin{axis}[
-%     width=10cm,
-%     xlabel={$R_{\mathrm{gen}}$ [k$\Omega$]},
-%     ylabel={$V_{\mathrm{out,Rgen}}$ [V/√Hz]},
-%     grid=both,
-%     minor tick num=1,
-%     thick,
-%     domain=50:500,
-%     samples=100,
-%     ]
-%     % Parameters: IN = 2e-12 A/√Hz, AN = 1000 (example)
-%     \addplot[
-%       blue,
-%       very thick,
-%     ]{2e-12 * (x*1e3) * 1000}; % x in kΩ → convert to Ω
-%     \addlegendentry{$I_N = 2\,\mathrm{pA}/\sqrt{\mathrm{Hz}},\,A_N=1000$}
-%     \end{axis}
-% \end{tikzpicture}
+Same as the previous circuit, however this time with the added resistor. We can an $AC_{RMS_100k} = 3.285\mathrm{mV}$ and
+$AC_{RMS_200k} = 4.437\mathrm{mV}$ 
 

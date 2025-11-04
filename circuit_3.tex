@@ -100,10 +100,35 @@ This total noise is a function of the diode current
     V_{NIU4+}^2 + V_{NIU4-}^2  + V_{NR10R11}^2 } 
 \end{align}
 
-
+Graphing this functing yields:
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{billeder/ID_Vnoise_VS_diode.png}
+    \caption{total system voltage noise as a function of diode current. Note that the noise is proportional to the squareroot of  the current, 
+    this is due to the fact that shotnoise $V_{N,shot} = \sqrt{2 q id}$, thus as the diode current increases, the shotnoise
+    does not increase linearly.}
+    \label{fig:Vnoise_vs_diode_current}
+\end{figure}
 
 
 
 
 \subsection{simulation}
+
+
 \subsection{realisation}
+Building the circuit according the schematic and shielding it as good as possible. During the measurements
+the trasmitter supply voltage, was increased in descrete steps of 200mV, to firstly scan for large DC-output swings, then
+swept again at a higher resolution. The DC-output of the transimpedance amplifier is used to determine 
+the receiver diode current, and the final output of the system, to determine overall system noise.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{billeder/CIRCUIT_3_measurement.png}
+    \caption{circuit measurement of AC RMS noise from the output vs the diode current. It can be 
+    seen that the curve resembles the theoretical one, due to its decreasing nature, due to the squareroot of the shotnoise.
+    the abrubt and sudden increase in noise, is the result of the transimpedance amplifiers output, saturating at roughly 3,980V due to voltage supply limitations. }
+    \label{fig:circuit_3_simulation}
+\end{figure}
+
+
